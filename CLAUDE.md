@@ -23,13 +23,10 @@ npm run preview # preview production build
 
 ## Architecture
 
-Single-page React app with no routing, no external state management, and no backend. All application logic lives in one file:
+Single-page React app with no routing, no external state management, and no backend.
 
-- **`src/App.jsx`** — the entire app: transaction state, derived totals (income, expenses, balance), add-transaction form, type/category filters, and the transaction table. Everything is in a single `App` component using `useState`.
+- **`src/App.jsx`** — root component. Holds the `transactions` array in state and passes it down. Renders `Summary`, `TransactionForm`, and `TransactionList`.
+- **`src/Summary.jsx`** — receives `transactions` and derives `totalIncome`, `totalExpenses`, and `balance` internally. Displays the three summary cards.
+- **`src/TransactionForm.jsx`** — owns its own form state (`description`, `amount`, `type`, `category`). Calls the `onAdd` prop with a fully constructed transaction object on submit.
+- **`src/TransactionList.jsx`** — receives `transactions` and owns its own filter state (`filterType`, `filterCategory`). Renders the filter controls and the transaction table.
 - **`src/App.css`** — all styles.
-
-## Known Intentional Issues
-
-This is a course starter project (codewithmosh.com Claude Code course) that ships with deliberate bugs to be fixed during the course:
-
-- **Amount bug**: transaction `amount` values are stored as strings (from `<input type="number">`, which still yields a string). The `reduce` calls that compute totals do string concatenation instead of numeric addition, producing garbled values in the summary cards.
