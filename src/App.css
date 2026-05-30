@@ -1,350 +1,300 @@
-/* ===== Layout ===== */
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
 
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(10px); }
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ─── App Shell ─────────────────────────────────── */
 .app {
-  max-width: 920px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 52px 28px 100px;
+  padding: 24px 20px 48px;
 }
 
-/* ===== Header ===== */
-
+/* ─── Header ─────────────────────────────────────── */
 .app-header {
-  margin-bottom: 44px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid var(--border);
-  animation: fadeUp 0.45s ease both;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border: 1px solid var(--border);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  background: var(--surface);
+  position: relative;
+  animation: fadeSlideIn 0.3s ease both;
+}
+
+.app-header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--text), transparent 70%);
+  box-shadow: 0 0 12px rgba(0, 255, 65, 0.6);
 }
 
 .app-header h1 {
-  font-family: var(--font-display);
-  font-size: 46px;
-  font-weight: 300;
-  letter-spacing: -0.5px;
-  line-height: 1.05;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   color: var(--text);
-}
-
-.app-header h1 em {
-  font-style: italic;
-  color: var(--gold);
-}
-
-.subtitle {
-  margin-top: 7px;
-  font-size: 10.5px;
-  letter-spacing: 0.18em;
   text-transform: uppercase;
+  text-shadow: 0 0 14px rgba(0, 255, 65, 0.7);
+}
+
+.app-header h1::after {
+  content: '_';
+  animation: blink 1s step-end infinite;
+}
+
+.app-header .subtitle {
   color: var(--text-muted);
+  font-size: 11px;
+  margin-top: 5px;
+  letter-spacing: 0.04em;
 }
 
-/* ===== Panel base ===== */
-
-.panel {
-  background: var(--surface);
-  border: 1px solid var(--border);
+.header-date {
+  color: var(--text-dim);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  padding-top: 3px;
 }
 
-.panel-label {
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 14px;
-}
-
-/* ===== Summary cards ===== */
-
+/* ─── Summary Cards ──────────────────────────────── */
 .summary {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-  margin-bottom: 1px;
-  animation: fadeUp 0.45s 0.05s ease both;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .summary-card {
+  border: 1px solid var(--border);
+  padding: 16px;
   background: var(--surface);
-  padding: 26px 22px 22px;
   position: relative;
   overflow: hidden;
+  animation: fadeSlideIn 0.3s ease both;
 }
+.summary-card:nth-child(1) { animation-delay: 0.05s; }
+.summary-card:nth-child(2) { animation-delay: 0.10s; }
+.summary-card:nth-child(3) { animation-delay: 0.15s; }
 
-.summary-card::after {
+.summary-card::before {
   content: '';
   position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 2px;
+  top: 0; left: 0; right: 0;
+  height: 1px;
 }
-.summary-card:nth-child(1)::after { background: var(--green); }
-.summary-card:nth-child(2)::after { background: var(--red); }
-.summary-card:nth-child(3)::after { background: var(--gold); }
+.summary-card:nth-child(1)::before { background: var(--text);  box-shadow: 0 0 8px var(--text); }
+.summary-card:nth-child(2)::before { background: var(--red);   box-shadow: 0 0 8px var(--red); }
+.summary-card:nth-child(3)::before { background: var(--amber); box-shadow: 0 0 8px var(--amber); }
 
 .summary-card h3 {
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  font-size: 9px;
+  letter-spacing: 0.2em;
   color: var(--text-muted);
+  text-transform: uppercase;
   margin-bottom: 10px;
 }
 
-.stat-value {
-  font-family: var(--font-display);
-  font-size: 40px;
-  font-weight: 300;
-  letter-spacing: -1px;
-  line-height: 1;
+.income-amount {
+  color: var(--text);
+  font-size: 22px;
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.45);
 }
 
-.stat-value.income  { color: var(--green); }
-.stat-value.expense { color: var(--red); }
-.stat-value.balance { color: var(--text); }
-.stat-value.negative { color: var(--red); }
+.expense-amount {
+  color: var(--red);
+  font-size: 22px;
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(255, 68, 68, 0.45);
+}
 
-/* ===== Spending Chart ===== */
+.balance-amount {
+  color: var(--amber);
+  font-size: 22px;
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(255, 183, 0, 0.45);
+}
 
+/* ─── Spending Chart ─────────────────────────────── */
 .spending-chart {
-  background: var(--surface);
   border: 1px solid var(--border);
-  border-top: none;
-  padding: 22px 22px 16px;
+  padding: 20px;
   margin-bottom: 20px;
-  animation: fadeUp 0.45s 0.1s ease both;
+  background: var(--surface);
+  animation: fadeSlideIn 0.3s ease 0.20s both;
 }
 
 .spending-chart h2 {
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  font-size: 9px;
+  letter-spacing: 0.2em;
   color: var(--text-muted);
-  margin-bottom: 18px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
 }
+.spending-chart h2::before { content: '> '; color: var(--text-dim); }
 
-/* ===== Add Transaction ===== */
-
+/* ─── Add Transaction ────────────────────────────── */
 .add-transaction {
-  background: var(--surface);
   border: 1px solid var(--border);
-  padding: 22px 22px;
+  padding: 20px;
   margin-bottom: 20px;
-  animation: fadeUp 0.45s 0.15s ease both;
+  background: var(--surface);
+  animation: fadeSlideIn 0.3s ease 0.25s both;
 }
 
 .add-transaction h2 {
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  font-size: 9px;
+  letter-spacing: 0.2em;
   color: var(--text-muted);
-  margin-bottom: 16px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
 }
+.add-transaction h2::before { content: '> '; color: var(--text-dim); }
 
 form {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr auto;
-  gap: 8px;
-  align-items: end;
-}
-
-.form-field {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.form-field label {
-  font-size: 10px;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: var(--text-muted);
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 form input,
 form select {
-  background: var(--surface-mid);
+  padding: 8px 10px;
+  background: var(--bg);
   border: 1px solid var(--border);
+  font-family: 'Fira Code', monospace;
+  font-size: 13px;
   color: var(--text);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 300;
-  padding: 9px 11px;
   outline: none;
-  border-radius: var(--radius);
-  appearance: none;
-  -webkit-appearance: none;
-  transition: border-color var(--ease), background var(--ease);
-  width: 100%;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
-
-form input::placeholder { color: var(--text-muted); }
 
 form input:focus,
 form select:focus {
-  border-color: var(--gold);
-  background: var(--surface-high);
+  border-color: var(--text-dim);
+  box-shadow: 0 0 0 1px var(--text-muted);
 }
+
+form input::placeholder { color: var(--text-muted); }
+form select option { background: var(--bg); color: var(--text); }
+
+form input[type="text"]   { flex: 2; }
+form input[type="number"] { flex: 1; }
+form select               { flex: 1; }
 
 form button {
-  background: var(--gold);
-  color: #0c0c0f;
-  border: none;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 500;
+  padding: 8px 20px;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--text-dim);
+  cursor: pointer;
+  font-family: 'Fira Code', monospace;
+  font-size: 12px;
+  font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  padding: 9px 20px;
-  cursor: pointer;
-  border-radius: var(--radius);
-  white-space: nowrap;
-  transition: opacity var(--ease), transform var(--ease);
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
 }
 
-form button:hover  { opacity: 0.82; transform: translateY(-1px); }
-form button:active { opacity: 1;    transform: translateY(0); }
+form button:hover {
+  background: var(--text);
+  color: var(--bg);
+  box-shadow: 0 0 16px rgba(0, 255, 65, 0.35);
+}
 
-/* ===== Transaction List ===== */
-
+/* ─── Transactions ───────────────────────────────── */
 .transactions {
-  background: var(--surface);
   border: 1px solid var(--border);
-  padding: 22px 22px;
-  animation: fadeUp 0.45s 0.2s ease both;
-}
-
-.transactions-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
+  background: var(--surface);
+  margin-bottom: 24px;
+  animation: fadeSlideIn 0.3s ease 0.30s both;
 }
 
 .transactions h2 {
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  font-size: 9px;
+  letter-spacing: 0.2em;
   color: var(--text-muted);
+  text-transform: uppercase;
+  padding: 16px 20px 0;
 }
+.transactions h2::before { content: '> '; color: var(--text-dim); }
 
 .filters {
   display: flex;
   gap: 8px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
 }
 
 .filters select {
-  background: var(--surface-mid);
+  padding: 5px 8px;
+  background: var(--bg);
   border: 1px solid var(--border);
-  color: var(--text);
-  font-family: var(--font-mono);
+  font-family: 'Fira Code', monospace;
   font-size: 11px;
-  font-weight: 300;
-  padding: 5px 10px;
+  color: var(--text-dim);
   outline: none;
   cursor: pointer;
-  appearance: none;
-  -webkit-appearance: none;
-  border-radius: var(--radius);
-  transition: border-color var(--ease);
 }
-
-.filters select:focus,
-.filters select:hover { border-color: var(--border-mid); }
-
-/* ===== Table ===== */
 
 table {
   width: 100%;
   border-collapse: collapse;
 }
 
-thead tr { border-bottom: 1px solid var(--border); }
+thead { background: transparent; }
 
 th {
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  padding: 0 14px 10px;
+  padding: 8px 20px;
   text-align: left;
+  border-bottom: 1px solid var(--border);
+  font-size: 9px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-weight: 400;
 }
-th:first-child { padding-left: 0; }
-th:last-child  { padding-right: 0; text-align: right; }
 
 td {
-  padding: 13px 14px;
+  padding: 10px 20px;
+  text-align: left;
+  border-bottom: 1px solid #0A120A;
   font-size: 12px;
-  border-bottom: 1px solid var(--border);
-  vertical-align: middle;
+  color: var(--text-dim);
 }
-td:first-child { padding-left: 0; color: var(--text-muted); font-size: 11px; }
-td:last-child  { padding-right: 0; text-align: right; }
+
+tbody tr:hover td {
+  background: var(--surface-2);
+  color: var(--text);
+}
 
 tbody tr:last-child td { border-bottom: none; }
-tbody tr { transition: background var(--ease); }
-tbody tr:hover td { background: var(--surface-mid); }
-
-/* ===== Amount cells ===== */
-
-.amount {
-  font-family: var(--font-display);
-  font-size: 15px;
-  font-weight: 400;
-  letter-spacing: 0.01em;
-}
-.amount.income  { color: var(--green); }
-.amount.expense { color: var(--red); }
-
-/* ===== Category badge ===== */
-
-.badge {
-  display: inline-block;
-  background: var(--surface-high);
-  border: 1px solid var(--border-mid);
-  color: var(--text-muted);
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 2px 7px;
-  border-radius: 2px;
-}
-
-/* ===== Delete button ===== */
 
 .delete-btn {
-  background: none;
-  border: 1px solid transparent;
-  color: var(--border-mid);
-  font-size: 17px;
-  line-height: 1;
-  padding: 3px 7px;
+  padding: 3px 8px;
+  background: transparent;
+  border: 1px solid #3D1A1A;
   cursor: pointer;
-  border-radius: var(--radius);
-  transition: color var(--ease), border-color var(--ease), background var(--ease);
-}
-.delete-btn:hover {
-  color: var(--red);
-  border-color: rgba(196, 68, 68, 0.25);
-  background: var(--red-dim);
-}
-
-/* ===== Empty state ===== */
-
-.empty-state {
-  text-align: center;
-  padding: 36px 0 20px;
-  color: var(--text-muted);
+  font-family: 'Fira Code', monospace;
   font-size: 11px;
-  letter-spacing: 0.1em;
+  color: #552222;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: all 0.15s;
+}
+
+.delete-btn:hover {
+  background: var(--red);
+  border-color: var(--red);
+  color: var(--bg);
+  box-shadow: 0 0 8px rgba(255, 68, 68, 0.4);
 }

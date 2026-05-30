@@ -1,20 +1,28 @@
-import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Cell } from 'recharts';
 
-const TOOLTIP_STYLE = {
-  background: '#16161d',
-  border: '1px solid #1e1e28',
-  borderRadius: '3px',
-  fontFamily: "'JetBrains Mono', monospace",
-  fontSize: '11px',
-  color: '#ddd8ce',
-  boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
-};
+const BAR_COLORS = ['#00FF41', '#00D936', '#00B82E', '#009925', '#00801E', '#006618', '#004D12'];
+
+function CustomTooltip({ active, payload, label }) {
+  if (!active || !payload?.length) return null;
+  return (
+    <div style={{
+      background: '#0A0F0A',
+      border: '1px solid #1A3A1A',
+      padding: '8px 12px',
+      fontFamily: "'Fira Code', monospace",
+    }}>
+      <div style={{ fontSize: 9, letterSpacing: '0.15em', color: '#155226', textTransform: 'uppercase', marginBottom: 4 }}>{label}</div>
+      <div style={{ fontSize: 14, color: '#00FF41' }}>${payload[0].value.toLocaleString()}</div>
+    </div>
+  );
+}
 
 function SpendingChart({ transactions }) {
   const expensesByCategory = transactions
     .filter(t => t.type === 'expense')
     .reduce((acc, t) => {
-      acc[t.category] = (acc[t.category] || 0) + parseFloat(t.amount);
+      const cat = t.category;
+      acc[cat] = (acc[cat] || 0) + parseFloat(t.amount);
       return acc;
     }, {});
 
@@ -30,27 +38,27 @@ function SpendingChart({ transactions }) {
   return (
     <div className="spending-chart">
       <h2>Spending by Category</h2>
-      <ResponsiveContainer width="100%" height={240}>
-        <BarChart data={data} margin={{ top: 4, right: 4, left: -10, bottom: 4 }}>
-          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#1e1e28" />
+      <ResponsiveContainer width="100%" height={260}>
+        <BarChart data={data} margin={{ top: 4, right: 4, left: 0, bottom: 4 }}>
+          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#1A3A1A" />
           <XAxis
             dataKey="name"
-            tick={{ fontSize: 10, fill: '#52525e', fontFamily: "'JetBrains Mono', monospace", fontWeight: 400 }}
-            axisLine={false}
+            tick={{ fontSize: 11, fill: '#2A7A3B', fontFamily: "'Fira Code', monospace" }}
+            axisLine={{ stroke: '#1A3A1A' }}
             tickLine={false}
           />
           <YAxis
             tickFormatter={(v) => `$${v}`}
-            tick={{ fontSize: 10, fill: '#52525e', fontFamily: "'JetBrains Mono', monospace", fontWeight: 400 }}
+            tick={{ fontSize: 11, fill: '#2A7A3B', fontFamily: "'Fira Code', monospace" }}
             axisLine={false}
             tickLine={false}
           />
-          <Tooltip
-            formatter={(value) => [`$${value.toFixed(2)}`, 'Spent']}
-            contentStyle={TOOLTIP_STYLE}
-            cursor={{ fill: 'rgba(196, 151, 58, 0.05)' }}
-          />
-          <Bar dataKey="value" fill="#c4973a" radius={[2, 2, 0, 0]} />
+          <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(0, 255, 65, 0.04)' }} />
+          <Bar dataKey="value" radius={[2, 2, 0, 0]} maxBarSize={56}>
+            {data.map((_, i) => (
+              <Cell key={i} fill={BAR_COLORS[i % BAR_COLORS.length]} />
+            ))}
+          </Bar>
         </BarChart>
       </ResponsiveContainer>
     </div>

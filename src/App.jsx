@@ -10,7 +10,7 @@ function App() {
     { id: 1, description: "Salary", amount: 5000, type: "income", category: "salary", date: "2025-01-01" },
     { id: 2, description: "Rent", amount: 1200, type: "expense", category: "housing", date: "2025-01-02" },
     { id: 3, description: "Groceries", amount: 150, type: "expense", category: "food", date: "2025-01-03" },
-    { id: 4, description: "Freelance Work", amount: 800, type: "income", category: "salary", date: "2025-01-05" },
+    { id: 4, description: "Freelance Work", amount: 800, type: "expense", category: "salary", date: "2025-01-05" },
     { id: 5, description: "Electric Bill", amount: 95, type: "expense", category: "utilities", date: "2025-01-06" },
     { id: 6, description: "Dinner Out", amount: 65, type: "expense", category: "food", date: "2025-01-07" },
     { id: 7, description: "Gas", amount: 45, type: "expense", category: "transport", date: "2025-01-08" },
@@ -28,8 +28,11 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>Finance <em>Tracker</em></h1>
-        <p className="subtitle">Personal ledger &mdash; income &amp; expenses</p>
+        <div>
+          <h1>Finance Tracker</h1>
+          <p className="subtitle">// portfolio monitoring system v1.0</p>
+        </div>
+        <span className="header-date">{new Date().toISOString().slice(0, 10)}</span>
       </header>
 
       <Summary transactions={transactions} />
