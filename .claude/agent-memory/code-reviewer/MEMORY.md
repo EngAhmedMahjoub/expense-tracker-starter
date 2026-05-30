@@ -1,0 +1,3 @@
+- [Project Architecture](project-architecture.md) — single-page Vite 7 + React 19 app, no router/state-lib/backend; recharts for chart
+- [Codebase Conventions](codebase-conventions.md) — recurring style patterns and intentional decisions observed across all src/ files
+- [Known Issues](known-issues.md) — bugs and anti-patterns identified in past reviews; use to avoid re-flagging fixed items

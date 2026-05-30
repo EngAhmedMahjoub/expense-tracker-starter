@@ -9,6 +9,7 @@
   --text-muted:   #155226;
   --red:          #FF4444;
   --amber:        #FFB700;
+  --z-scanline:   9999;
 }
 
 * {
@@ -37,5 +38,5 @@ body::after {
     rgba(0, 0, 0, 0.06) 4px
   );
   pointer-events: none;
-  z-index: 9999;
+  z-index: var(--z-scanline);
 }

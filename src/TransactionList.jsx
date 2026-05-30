@@ -1,10 +1,10 @@
 import { useState } from 'react'
-
-const categories = ["food", "housing", "utilities", "transport", "entertainment", "salary", "other"];
+import { CATEGORIES } from './constants'
 
 function TransactionList({ transactions, onDelete }) {
   const [filterType, setFilterType] = useState("all");
   const [filterCategory, setFilterCategory] = useState("all");
+  const [pendingDelete, setPendingDelete] = useState(null);
 
   let filtered = transactions;
   if (filterType !== "all") {
@@ -25,7 +25,7 @@ function TransactionList({ transactions, onDelete }) {
         </select>
         <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
           <option value="all">All Categories</option>
-          {categories.map(cat => (
+          {CATEGORIES.map(cat => (
             <option key={cat} value={cat}>{cat}</option>
           ))}
         </select>
@@ -38,7 +38,7 @@ function TransactionList({ transactions, onDelete }) {
             <th>Description</th>
             <th>Category</th>
             <th>Amount</th>
-            <th></th>
+            <th><span className="sr-only">Actions</span></th>
           </tr>
         </thead>
         <tbody>
@@ -48,17 +48,17 @@ function TransactionList({ transactions, onDelete }) {
               <td>{t.description}</td>
               <td>{t.category}</td>
               <td className={t.type === "income" ? "income-amount" : "expense-amount"}>
-                {t.type === "income" ? "+" : "-"}${t.amount}
+                {t.type === "income" ? "+" : "-"}${t.amount.toFixed(2)}
               </td>
               <td>
-                <button
-                  className="delete-btn"
-                  onClick={() => {
-                    if (window.confirm('Delete this transaction?')) onDelete(t.id);
-                  }}
-                >
-                  Delete
-                </button>
+                {pendingDelete === t.id ? (
+                  <span className="confirm-delete">
+                    <button className="confirm-btn" onClick={() => { onDelete(t.id); setPendingDelete(null); }}>Confirm</button>
+                    <button className="cancel-btn" onClick={() => setPendingDelete(null)}>Cancel</button>
+                  </span>
+                ) : (
+                  <button className="delete-btn" onClick={() => setPendingDelete(t.id)}>Delete</button>
+                )}
               </td>
             </tr>
           ))}
